@@ -1,0 +1,15 @@
+The loginValidator Project works in the following steps
+
+1) The user is brought to the login.html page with a space for entering username and password.
+The user enters the username and password which are 'admin' and 'password'.
+
+2) The login is taken in by the loginValidator.java file and the username and password are validated
+
+3) If the login is correct, the user is brought to the dashboard page which welcomes the user 
+and gives a button for logging out.
+
+4) If the login is incorrect, the user is brought back to the login page with a red error message
+saying the login was unsuccessful and prompts the user to try again
+
+5) When logging out, the logout.java servlet invalidates the session that the user was in and then 
+redirects the user back to the login.html page

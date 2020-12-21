@@ -1,0 +1,155 @@
+LoginValidator.java
+----------------------------------------------------------------------
+package com.LoginValidation;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+
+/**
+ * Servlet implementation class LoginValidator
+ */
+@WebServlet("/LoginValidator")
+public class LoginValidator extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public LoginValidator() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#service(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void service(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		Cookie cookie = new Cookie("user", "admin");
+		
+		String username = request.getParameter("username");
+		
+		String password = request.getParameter("password");
+		
+		RequestDispatcher rd = null;
+		
+		if(username.equalsIgnoreCase("admin") && password.equals("password")) {
+			HttpSession session = request.getSession();
+			session.setAttribute("seshname", username);
+			rd = request.getRequestDispatcher("loginsuccess.jsp");
+			rd.forward(request, response);
+		}
+		else {
+			rd = request.getRequestDispatcher("loginFailure.jsp");
+			rd.forward(request, response);
+			
+		}
+		
+	}
+
+}
+
+Logout.java
+----------------------------------------------------------------------
+package com.LoginValidation;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+/**
+ * Servlet implementation class Logout
+ */
+@WebServlet("/Logout")
+public class Logout extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		HttpSession session = request.getSession(false);
+		session.invalidate();
+		response.sendRedirect("login.html");
+		
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+}
+
+login.html
+----------------------------------------------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+</head>
+<body>
+
+<form method="post" action="LoginValidator">
+
+Username:<input type="text" name="username"> <br/>
+Password: <input type="password" name="password"><br/>
+
+
+
+<button type="submit">Login</button>
+
+</form>
+
+
+
+
+</body>
+</html>
+
+loginsuccess.jsp
+----------------------------------------------------------------------
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+</head>
+<body>
+Welcome : <%=session.getAttribute("seshname")%>
+<br/>
+<a href="Logout">Logout</a>
+</body>
+</html>
+
+loginFailure.jsp
+----------------------------------------------------------------------
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<title>Login</title>
+</head>
+<body>
+
+<% 
+out.println("<span style = 'color:red'> Invalid Username or Password </span>");
+%>
+<jsp:include page="login.html"></jsp:include>
+
+</body>
+</html>
